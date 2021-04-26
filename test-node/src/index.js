@@ -1,4 +1,5 @@
 const puertoSerie = require('serialport');
+const Readline = require('@serialport/parser-readline')
 const fs = require('fs');
 
 /* verPuertos();
