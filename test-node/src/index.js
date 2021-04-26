@@ -38,5 +38,9 @@ port.open(function (err) {
   // The open event is always emitted
   port.on('open', function() {
       console.log('puerto abierto');
+
+      for (var i=0;i<1000;i++){
+          console.log(port.read());
+      }
     // open logic
   })
