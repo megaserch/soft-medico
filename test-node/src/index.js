@@ -18,7 +18,7 @@ err => console.log(err)
 
 
 
-const puerto = new puertoSerie("COM8", {
+const port = new puertoSerie("COM8", {
     baudRate: 115200,
 /*     dataBits: 8,
     parity: none,
