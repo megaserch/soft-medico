@@ -1,23 +1,7 @@
+const express = require('express');
+
 const puertoSerie = require('serialport');
 const Readline = require('@serialport/parser-readline')
-const fs = require('fs');
-
-/* verPuertos();
-
-async function verPuertos(){
-    const listaPuertos = await puertoSerie.list();
-    console.log(listaPuertos);
-}
- */
-
-
-/* puertoSerie.list().then(
-ports => ports.forEach( el => console.log(el)),
-err => console.log(err)
-);
- */
-
-
 
 const port = new puertoSerie("COM8", {
     baudRate: 115200,
@@ -26,38 +10,50 @@ const port = new puertoSerie("COM8", {
     stopBits : 1,
  */    autoOpen: false,
 });
- 
+
 port.open(function (err) {
     if (err) {
       return console.log('Error opening port: ', err.message);
     }
   
-    // Because there's no callback to write, write errors will be emitted on the port:
     port.write('main screen turn on');
   })
   
-  // The open event is always emitted
   port.on('open', function() {
       console.log('puerto abierto');
-
-     /*  for (var i=0;i<100;i++){
-          console.log(port.read());
-      } */
-    // open logic
   })
 
-  // Read data that is available but keep the stream in "paused mode"
-/* port.on('readable', function () {
-    console.log('Data readable:', port.read())
-  })
-  
-  // Switches the port into "flowing mode"
-  port.on('data', function (data) {
-    console.log('Data data:', data)
-  }) */
-  
-  // Pipe the data into another stream (like a parser or standard out)
-  //const lineStream = port.pipe(new Readline())
+const app = express();
 
-const parser = port.pipe(new Readline({ delimiter: '\r\n' }))
-parser.on('data', console.log)
+app.set('port', 4321);
+
+app.listen( 4321, "0.0.0.0", () => {
+    console.log('Server iniciado...');
+})
+
+
+
+app.get('/events', async function(req, res) {
+    console.log('Got /events');
+    res.set({
+      'Cache-Control': 'no-cache',
+      'Content-Type': 'text/event-stream',
+      'Connection': 'keep-alive'
+    });
+    res.flushHeaders();
+
+    // Tell the client to retry every 10 seconds if connectivity is lost
+    res.write('retry: 10000\n\n');
+    let count = 0;
+
+    const parser = port.pipe(new Readline({ delimiter: '\r\n' }))
+
+    while (true) {
+      await new Promise(resolve => setTimeout(resolve, 1));
+      
+      parser.on('data', res.write)
+      //console.log('Emit', ++count);
+      // Emit an SSE that contains the current 'count' as a string
+      //res.write(`data: ${count}\n\n`);
+    }
+  });
