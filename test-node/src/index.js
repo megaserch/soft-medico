@@ -48,13 +48,13 @@ port.open(function (err) {
 
   // Read data that is available but keep the stream in "paused mode"
 port.on('readable', function () {
-    console.log('Data:', port.read())
+    console.log('Data readable:', port.read())
   })
   
   // Switches the port into "flowing mode"
   port.on('data', function (data) {
-    console.log('Data:', data)
+    console.log('Data data:', data)
   })
   
   // Pipe the data into another stream (like a parser or standard out)
-  const lineStream = port.pipe(new Readline())
+  //const lineStream = port.pipe(new Readline())
