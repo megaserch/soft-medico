@@ -61,7 +61,20 @@ app.get('/events', async function(req, res) {
   });
 
 
-  function handleResponse(data) {
-    console.log('Rx', data);
-    console.log();
-  }
+  app.get('/', async (req, res) => {
+    const promise = new Promise((resolve, reject) => {
+        port.on('data', (data, err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(data[0]);
+      });
+    })
+  
+    const data = await promise;
+  
+    res.json(data);
+  })
+  
+
