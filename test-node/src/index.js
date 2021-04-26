@@ -47,13 +47,21 @@ app.get('/events', async function(req, res) {
     let count = 0;
 
     const parser = port.pipe(new Readline({ delimiter: '\r\n' }))
+    parser.on('data', res.write)
 
-    while (true) {
-      await new Promise(resolve => setTimeout(resolve, 1));
+    //res.write(`data: ${count}\n\n`);
+    /* while (true) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      parser.on('data', res.write)
+     */  
       //console.log('Emit', ++count);
       // Emit an SSE that contains the current 'count' as a string
-      //res.write(`data: ${count}\n\n`);
-    }
+      
+    //}
   });
+
+
+  function handleResponse(data) {
+    console.log('Rx', data);
+    console.log();
+  }
