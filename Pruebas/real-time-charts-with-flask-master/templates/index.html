@@ -88,18 +88,45 @@
 
         const source = new EventSource("/chart-data");
 
-        source.onmessage = function (event) {
+/*        source.onmessage = function (event) {
 
             const data = JSON.parse(event.data);
             //console.log(data)
-            if (config.data.labels.length === 300) {
+            if (config.data.labels.length === 250) {
                 config.data.labels.shift();
                 config.data.datasets[0].data.shift();
             }
             config.data.labels.push(data.time);
             config.data.datasets[0].data.push(data.value);
             lineChart.update();
-        }
+        }*/
+
+        var prueba=0
+        //var data1 
+
+        source.onmessage = function (event) {
+
+            const data = JSON.parse(event.data);
+            
+            console.log(data)
+            prueba+=1;
+
+            //console.log(data)
+            if (config.data.labels.length === 250) {
+                config.data.labels.shift();
+                config.data.datasets[0].data.shift();
+            }
+            config.data.labels.push(data.time);
+            config.data.datasets[0].data.push(data.value);
+            lineChart.update();
+            }
+
+            //if (prueba==50) {
+             //   console.log("prueba=" + prueba)
+              //  lineChart.update();
+               // prueba=0;
+            //}
+
     });
 </script>
 </body>

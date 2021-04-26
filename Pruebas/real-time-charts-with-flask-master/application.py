@@ -25,10 +25,16 @@ def index():
 def chart_data():
     def generate_random_data():
         while True:
-            json_data = json.dumps(
-                {'time': datetime.now().strftime('%H:%M:%S.%f'), 'value': random.random() * 100})
-            yield f"data:{json_data}\n\n"
-            time.sleep(0.01)
+            #json_data = json.dumps(
+            #    {'time': datetime.now().strftime('%H:%M:%S.%f'), 'value': random.random() * 100})
+            #yield f"data:{json_data}\n\n"
+            #time.sleep(0.01)
+
+            #for _ in range(250) #agregada
+                json_data = json.dumps(
+                    {'time': datetime.now().strftime('%H:%M:%S.%f'), 'value': random.random() * 100})
+                yield f"data:{json_data}\n\n"
+                time.sleep(0.01)
 
     return Response(generate_random_data(), mimetype='text/event-stream')
 
