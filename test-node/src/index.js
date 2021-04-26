@@ -26,16 +26,17 @@ const puerto = new puertoSerie("COM8", {
  */    autoOpen: false,
 });
  
-puerto.open();
-
-/* puerto.on('readable', function () {
-    console.log('Data:', puerto.read())
-  }); */
-
-//puerto.write()
-
-for (var o=0;o<100;o++){
-    console.log(puerto.read());
-}
- 
-puerto.close();
+port.open(function (err) {
+    if (err) {
+      return console.log('Error opening port: ', err.message);
+    }
+  
+    // Because there's no callback to write, write errors will be emitted on the port:
+    port.write('main screen turn on');
+  })
+  
+  // The open event is always emitted
+  port.on('open', function() {
+      console.log('puerto abierto');
+    // open logic
+  })
