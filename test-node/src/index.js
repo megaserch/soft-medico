@@ -68,7 +68,7 @@ app.get('/events', async function(req, res) {
           reject(err);
           return;
         }
-        resolve(data[0]);
+        resolve(data);
       });
     })
   
